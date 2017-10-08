@@ -1,0 +1,26 @@
+<h1>Twoje wypożyczone książki</h1>
+
+<table class="table">
+  <thead>
+    <th>Autor</th>
+    <th>Tytuł</th>
+    <th>Data wypożyczenia</th>
+    <th>Status</th>
+  </thead>
+  <tbody>
+    <% @orders.each do |o| %>
+      <tr>
+        <td><%= o.book_author %></td>
+        <td><%= o.book_title %></td>
+        <td><%= o.created_at.strftime("%d %m %Y, %H:%M") %></td>
+        <% if o.is_returned == true || o.is_returned == nil %>
+          <td>Książka oddana</td>
+        <% else %>
+          <td><%= link_to "Oddaj", returnbook_path(o) %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @orders %>

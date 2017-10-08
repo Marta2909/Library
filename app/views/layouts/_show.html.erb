@@ -1,0 +1,40 @@
+<h1 class="page-header">Informacje o książce</h1>
+
+<table class="table table-bordered">
+  <tr>
+    <td><b>Autor: </b></td>
+    <td><%= @book.author %></td>
+  </tr>
+  <tr>
+    <td><b>Tytuł: </b></td>
+    <td><%= @book.title %></td>
+  </tr>
+  <tr>
+    <td><b>Opis: </b></td>
+    <td><%= @book.description%></td>
+  </tr>
+  <tr>
+    <td><b>Rok wydania: </b></td>
+    <td><%= @book.year %></td>
+  </tr>
+  <tr>
+    <td><b>Wydawnictwo: </b></td>
+    <td><%= @book.publisher %></td>
+  </tr>
+  <tr>
+    <td><b>W biblioteczce jest sztuk: </b></td>
+    <td><%= @book.count %></td>
+  </tr>
+  <tr>
+    <td><b>Dostępnych do wypożyczenia jest sztuk: </b></td>
+    <td><%= @book.count - @book.borrowed_count %></td>
+  </tr>
+</table>
+
+<div class="text-right">
+  <%if params[:controller] == "admin/books" %>
+    <%= link_to "Powrót", admin_books_path, class:"btn btn-primary" %>
+  <% else %>
+    <%= link_to "Powrót", books_path, class: "btn btn-primary" %>
+  <% end %>
+</div>

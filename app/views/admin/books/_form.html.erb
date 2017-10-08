@@ -1,0 +1,9 @@
+<%= simple_form_for [:admin,@book] do |f| %>
+  <%= f.input :author, label: "Autor" %>
+  <%= f.input :title, label: "Tytuł" %>
+  <%= f.input :description, label: "Opis" %>
+  <%= f.input :year, label: "Rok wydania" %>
+  <%= f.input :count, label: "Liczba sztuk" %>
+  <%= f.input :publisher, label: "Wydawnictwo" %>
+  <%= f.button :submit, button_name, class: "btn btn-success" %>
+<% end %>
