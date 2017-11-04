@@ -1,13 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Book, :type => :model do
+
   context 'when Book has all data entered' do
     it 'should be saved to database' do
       b = Book.new(title: "title", author:"author", description: "abc", year: 2017, publisher: "B")
       expect(b.save).to be true
     end
   end
-  
+
   context 'when Book has not all data entered' do
     it 'a book without title should not be saved to database' do
       b = Book.new(title: nil, author:"A", description: "abc", year: 2017, publisher: "B")
@@ -30,4 +31,5 @@ RSpec.describe Book, :type => :model do
       expect(b.save).to be false
     end
   end
+  
 end

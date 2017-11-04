@@ -33,7 +33,7 @@ class Admin::BooksController < ApplicationController
       redirect_to admin_books_path
     else
       flash[:notice] = "Spróbuj jeszcze raz"
-      render :new
+      render :edit
     end
   end
 
@@ -48,7 +48,7 @@ class Admin::BooksController < ApplicationController
       redirect_to admin_books_path
     else
       flash[:notice] = "Spróbuj jeszcze raz"
-      rener :index
+      render :index
     end
   end
 

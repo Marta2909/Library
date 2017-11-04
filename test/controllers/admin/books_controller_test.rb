@@ -1,14 +1,50 @@
 require 'test_helper'
 
 class Admin::BooksControllerTest < ActionDispatch::IntegrationTest
+
+  def http_login
+    user = 'admin'
+    pw = 'admin'
+    request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials(user,pw)
+  end
+
+  test "GET index" do
+    http_login
+    get admin_books_path
+    assert_response :success
+    assert_not_nil assigns(:books)
+  end
+
+  test "GET new" do
+    http_login
+    get new_admin_book_path
+    assert_response :success
+  end
+
   test "should create a book" do
+    http_login
+    #  expect_any_instance_of(Book).to receive(:create).with({author: 'Jan Kowalski'}.with_indifferent_access, {title: "tytuł"}.with_indifferent_access, {publisher: wydawca}.with_indifferent_access, {description: "opis"}.with_indifferent_access, {year: 2017}.with_indifferent_access, {count: 5}.with_indifferent_access)
+    #  post :create, book: { first_name: 'Sideshow', last_name: 'Bob', name: 'Sideshow Bob' }
     get new_admin_book_path
     assert :success
     book_before = Book.count
-    Book.create(title: "A", author:"b", description:"abc", publisher: "aaa", year: 2017, count: 10, borrowed_count: 0)
+    Book.create(title: "A", author:"b", description:"abc", publisher: "aaa", year: 2017, count: 10)
     book_after = Book.count
     assert_equal 1, book_after - book_before
-  #  assert_redirected_to admin_books_path => 401. Access denied.
+    assert_redirected_to admin_books_path
+    assert_equal flash[:notice], "Książka dodana"
+  end
+
+  test "should not create a book with empty attributes" do
+    http_login
+    get new_admin_book_path
+    assert :success
+    book_before = Book.count
+    Book.create(title: nil, author:"b", description:"abc", publisher: "aaa", year: 2017, count: 10)
+    book_after = Book.count
+    assert_equal 0, book_after - book_before
+    assert_redirected_to new_admin_book_path
+    assert_equal flash[:notice], "Spróbuj jeszcze raz"
   end
 
   test "should edit a book" do
@@ -18,7 +54,26 @@ class Admin::BooksControllerTest < ActionDispatch::IntegrationTest
     book.title = "C"
     book.save
     assert_equal "C", Book.first.title
+    assert_redirected_to admin_books_path
+    assert_equal flash[:notice], "Zaktualizowano dane o książce"
   #  assert_redirected_to admin_books_path => 401. Access denied.
+  end
+
+  test "should not edit a book with empty attributes" do
+    get edit_admin_book_path(Book.first)
+    assert :success
+    book = Book.first
+    book.title = nil
+    book.save
+    assert_not_equal nil, Book.first.title
+    assert_redirected_to new_admin_book_path
+    assert_equal flash[:notice], "Spróbuj jeszcze raz"
+  end
+
+  test "should show the book details" do
+    get admin_book_path
+    assert :success
+    assert_not_nil assigns(:book)
   end
 
   test "should destroy a book" do
@@ -30,6 +85,8 @@ class Admin::BooksControllerTest < ActionDispatch::IntegrationTest
       book_after = Book.count
       #assert_equal "Książka usunięta z biblioteczki. Nie można już wypożyczyć żadnej sztuki", flash[:notice]
       assert_equal -1, book_after - book_before
+      assert_redirected_to admin_books_path
+      assert_equal flash[:notice], "Książka usunięta z biblioteczki. Nie można już wypożyczyć żadnej sztuki"
     end
   end
 end
