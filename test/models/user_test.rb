@@ -6,8 +6,7 @@ class UserTest < ActiveSupport::TestCase
     :provider => 'google',
     :uid => '1234',
     :info => {
-      #:email => "user@example.com",
-      :name => "Justin Bieber"
+      :name => "Justin"
     },
     :credentials => {
       :token => "password"
@@ -18,9 +17,6 @@ class UserTest < ActiveSupport::TestCase
     user = User.new(
       :provider => "google",
       :uid => 1234,
-    #  :email => "user@example.com",
-    #  :password => 'password',
-    #  :password_confirmation => 'password'
     )
     user.save
     omniauth_user = User.from_omniauth(auth_hash)

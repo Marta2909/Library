@@ -14,6 +14,7 @@ describe Admin::BooksController do
 
   before(:each) do
     http_login
+    @first_book = Book.create(author: 'Jan Kowalski', title: "tytuł 1", publisher: "wydawca", description: "opis", year: 2017, count: 20, borrowed_count: 1)
   end
 
   describe "GET index" do
@@ -59,7 +60,7 @@ describe Admin::BooksController do
 
   describe "GET edit" do
     it "should be successful" do
-      get :edit, params: {id: Book.first.id}
+      get :edit, params: {id: @first_book.id}
       expect(response).to be_success
       expect(response).to render_template :edit
     end
@@ -69,7 +70,7 @@ describe Admin::BooksController do
     let(:attr) { { title: 'new title' } }
 
     it "should be successful if book has all attributes" do
-      put :update, params: {id: Book.first.id, book: attr}
+      put :update, params: {id: @first_book.id, book: attr}
       expect(assigns(:book).save).to be true
       expect(flash[:notice]).to eq "Zaktualizowano dane o książce"
       expect(Book.first.title).to eql attr[:title]
@@ -77,7 +78,7 @@ describe Admin::BooksController do
     end
 
     it "should not be successful if book has not all attributes" do
-      put :update, params: {id: Book.first.id, book: {title: nil}}
+      put :update, params: {id: @first_book.id, book: {title: nil}}
       expect(assigns(:book).save).to be false
       expect(flash[:notice]).to eq "Spróbuj jeszcze raz"
       expect(Book.first.title).not_to eql attr[:title]
@@ -101,8 +102,6 @@ describe Admin::BooksController do
     end
     it "should not be successful if the book doesn't exist" do
       expect { delete :destroy, params: {id: Book.last.id+1} }.to raise_error(ActiveRecord::RecordNotFound)
-      #expect(flash[:notice]).to eq "Spróbuj jeszcze raz"
-      #expect(response).to render_template :index
     end
   end
 
@@ -119,9 +118,7 @@ describe Admin::BooksController do
           borrowed_count: 4
         }
       }
-      should permit(:author, :title, :publisher, :description, :year, :count).
-        for(:create, params: params).
-        on(:book)
+      should permit(:author, :title, :publisher, :description, :year, :count).for(:create, params: params).on(:book)
     end
 
     it "should permit the params on update" do
@@ -137,9 +134,7 @@ describe Admin::BooksController do
           borrowed_count: 4
         }
       }
-      should permit(:author, :title, :publisher, :description, :year, :count).
-        for(:update, params: params).
-        on(:book)
+      should permit(:author, :title, :publisher, :description, :year, :count).for(:update, params: params).on(:book)
     end
   end
 

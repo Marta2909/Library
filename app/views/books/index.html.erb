@@ -15,8 +15,10 @@
         <td><%= book.borrowed_count %></td>
         <td><%= book.count - book.borrowed_count %></td>
         <td><%= link_to "Zobacz szczegóły", book_path(book) %></td>
-        <% if book.count - book.borrowed_count > 0 %>
-          <td><%= link_to "Wypożycz", orderbook_path(book) %></td> 
+        <% if book.count - book.borrowed_count > 0 && current_user %>
+          <td><%= link_to "Wypożycz", orderbook_path(book) %></td>
+        <% elsif book.count - book.borrowed_count > 0 && !current_user %>
+          <td><%= link_to "Zaloguj się, żeby wypożyczyć", "/auth/google_oauth2", id: "sign_in" %></td>
         <% else %>
           <td>Wszystkie książki wypożyczone.</td>
         <% end %>

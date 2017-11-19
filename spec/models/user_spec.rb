@@ -4,7 +4,6 @@ auth_hash = OmniAuth::AuthHash.new({
   :provider => 'google',
   :uid => '1234',
   :info => {
-    #:email => "user@example.com",
     :name => "Justin Bieber"
   },
   :credentials => {
@@ -16,14 +15,11 @@ describe User, "#from_omniauth" do
     it "should has many orders" do
       should have_many(:orders)
     end
-    
+
     it "should retrieve an existing user" do
         user = User.new(
             :provider => "google",
-            :uid => 1234,
-          #  :email => "user@example.com",
-          #  :password => 'password',
-          #  :password_confirmation => 'password'
+            :uid => 1234
             )
         user.save
         omniauth_user = User.from_omniauth(auth_hash)

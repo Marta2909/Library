@@ -23,8 +23,6 @@ class Admin::BooksControllerTest < ActionDispatch::IntegrationTest
 
   test "should create a book" do
     http_login
-    #  expect_any_instance_of(Book).to receive(:create).with({author: 'Jan Kowalski'}.with_indifferent_access, {title: "tytuł"}.with_indifferent_access, {publisher: wydawca}.with_indifferent_access, {description: "opis"}.with_indifferent_access, {year: 2017}.with_indifferent_access, {count: 5}.with_indifferent_access)
-    #  post :create, book: { first_name: 'Sideshow', last_name: 'Bob', name: 'Sideshow Bob' }
     get new_admin_book_path
     assert :success
     book_before = Book.count
@@ -56,7 +54,6 @@ class Admin::BooksControllerTest < ActionDispatch::IntegrationTest
     assert_equal "C", Book.first.title
     assert_redirected_to admin_books_path
     assert_equal flash[:notice], "Zaktualizowano dane o książce"
-  #  assert_redirected_to admin_books_path => 401. Access denied.
   end
 
   test "should not edit a book with empty attributes" do
@@ -81,9 +78,7 @@ class Admin::BooksControllerTest < ActionDispatch::IntegrationTest
     if Book.first.present?
       book_before = Book.count
       Book.first.destroy
-      #delete admin_book_path(Book.first) ??
       book_after = Book.count
-      #assert_equal "Książka usunięta z biblioteczki. Nie można już wypożyczyć żadnej sztuki", flash[:notice]
       assert_equal -1, book_after - book_before
       assert_redirected_to admin_books_path
       assert_equal flash[:notice], "Książka usunięta z biblioteczki. Nie można już wypożyczyć żadnej sztuki"

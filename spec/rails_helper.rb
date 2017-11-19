@@ -5,6 +5,7 @@ require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+require 'capybara/rspec'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -57,9 +58,21 @@ RSpec.configure do |config|
 
   Shoulda::Matchers.configure do |config|
     config.integrate do |with|
-      # Choose a test framework:
       with.test_framework :rspec
       with.library :rails
     end
   end
+
+  OmniAuth.config.test_mode = true
+  auth_hash = OmniAuth::AuthHash.new({
+    :provider => 'google',
+    :uid => '1234',
+    :info => {
+      :name => "Justin"
+    },
+    :credentials => {
+      :token => "password"
+    }
+  })
+  OmniAuth.config.add_mock(:google, auth_hash)
 end
