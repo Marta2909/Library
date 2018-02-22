@@ -13,10 +13,10 @@ class Admin::BooksController < ApplicationController
     @book = Book.new(book_params)
     @book.borrowed_count = 0
     if @book.save
-      flash[:notice] = "Książka dodana"
+      flash[:notice] = 'Book added'
       redirect_to admin_books_path
     else
-      flash[:notice] = "Spróbuj jeszcze raz"
+      flash[:notice] = 'Try again'
       render :new
     end
   end
@@ -29,25 +29,26 @@ class Admin::BooksController < ApplicationController
     @book = Book.find(params[:id])
     @book.update_attributes(book_params)
     if @book.save
-      flash[:notice] = "Zaktualizowano dane o książce"
+      flash[:notice] = 'Book updated'
       redirect_to admin_books_path
     else
-      flash[:notice] = "Spróbuj jeszcze raz"
+      flash[:notice] = 'Try again'
       render :edit
     end
   end
 
   def show
     @book = Book.find(params[:id])
+    @not_returned_books = @book.orders.where("is_returned = ?", false)
   end
 
   def destroy
     @book = Book.find(params[:id])
     if @book.destroy
-      flash[:notice] = "Książka usunięta z biblioteczki. Nie można już wypożyczyć żadnej sztuki"
+      flash[:notice] = 'Book removed from library. There are no copies to borrow'
       redirect_to admin_books_path
     else
-      flash[:notice] = "Spróbuj jeszcze raz"
+      flash[:notice] = 'Try again'
       render :index
     end
   end
@@ -59,9 +60,10 @@ class Admin::BooksController < ApplicationController
   end
 
   def authenticate
-    authenticate_or_request_with_http_basic "Podaj hasło!" do |name, password|
-      name == "admin" && password == "admin"
+    authenticate_or_request_with_http_basic 'Enter password' do |name, password|
+      name == 'admin' && password == 'admin'
     end
+    session[:admin] = 'admin'
   end
 
 end

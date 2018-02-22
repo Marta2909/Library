@@ -31,5 +31,13 @@ RSpec.describe Book, :type => :model do
       expect(b.save).to be false
     end
   end
-  
+
+  context 'when a Book object is created' do
+    let(:response) { Book.new }
+
+    it 'can have many orders' do
+      expect( response.orders.new ).to be_a_new Order
+    end
+  end
+
 end

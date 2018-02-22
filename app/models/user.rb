@@ -1,4 +1,4 @@
-class User < ApplicationRecord #<ActiveRecord::Base a model for Google auth
+class User < ActiveRecord::Base # <ActiveRecord::Base a model for Google auth
   has_many :orders
 
   def self.from_omniauth(auth)
@@ -10,4 +10,5 @@ class User < ApplicationRecord #<ActiveRecord::Base a model for Google auth
       user.save!
     end
   end
+
 end

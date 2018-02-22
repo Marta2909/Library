@@ -1,0 +1,8 @@
+<h4>Search results</h4>
+<% if @search_results.present? %>
+  <%= render partial: 'booklist', locals: { b: @search_results } %>
+<% else %>
+  <div class="alert alert-danger" role="alert">
+    <p>Not found</p>
+  </div>
+<% end %>

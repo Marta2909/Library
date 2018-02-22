@@ -1,10 +1,13 @@
-<h1>Twoje wypożyczone książki</h1>
+<h4>Your orders history</h4>
 
 <table class="table">
   <thead>
-    <th>Autor</th>
-    <th>Tytuł</th>
-    <th>Data wypożyczenia</th>
+    <th>Author</th>
+    <th>Title</th>
+    <th>Borrow date</th>
+    <th>Deadline</th>
+    <th>Days to deadline</th>
+    <th>Debt</th>
     <th>Status</th>
   </thead>
   <tbody>
@@ -12,11 +15,16 @@
       <tr>
         <td><%= o.book_author %></td>
         <td><%= o.book_title %></td>
-        <td><%= o.created_at.strftime("%d %m %Y, %H:%M") %></td>
+        <td><%= o.created_at.strftime("%d %m %Y") %></td>
+        <% if o.deadline != nil && o.debt != nil %>
+          <td><%= o.deadline.strftime("%d %m %Y") %></td>
+          <td><%= (o.deadline - Time.now).to_i/1.day %></td>
+          <td>$ <%= count_debt(o) %></td>
+        <% end %>
         <% if o.is_returned == true || o.is_returned == nil %>
-          <td>Książka oddana</td>
+          <td>Book returned</td>
         <% else %>
-          <td><%= link_to "Oddaj", returnbook_path(o) %></td>
+          <td><%= link_to "Return book", returnbook_path(o) %></td>
         <% end %>
       </tr>
     <% end %>
@@ -24,3 +32,7 @@
 </table>
 
 <%= paginate @orders %>
+
+<footer class="text-right">
+<%= link_to "Back", books_path, class: "btn btn-dark" %>
+</footer>

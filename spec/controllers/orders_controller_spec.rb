@@ -3,40 +3,21 @@ require 'rails_helper'
 describe OrdersController do
 
   before(:each) do
-    OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:google] = OmniAuth::AuthHash.new({
-      :uid => '1234',
-      :info => {
-        :name => "Justin"
-      },
-      :credentials => {
-        :token => "password"
-      }
-    })
-
-    date = Date.today + 10.days
-
-    #make a logged in user
-    request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:google]
-    @user = User.from_omniauth(request.env["omniauth.auth"])
-    @user.save
-    session[:user_id] = @user.id
-
-    #make the current user's order
-    @first_book = Book.new(author: 'Jan Kowalski', title: "tytuł 1", publisher: "wydawca", description: "opis", year: 2017, count: 20)
-    @order = Order.create(user_id: @user.id, book_id: @first_book.id, book_title: @first_book.title, book_author: @first_book.author, is_returned: false)
+    @first_book = Book.create!(author: 'Author1', title: "Title1", publisher: "Publisher1", description: "Description1", year: 2017, count: 20)
     @first_book.borrowed_count = 1
     @first_book.save
+    @user = User.create!
+    session[:user_id] = @user.id
+    @order = Order.create!(user_id: @user.id, book_id: @first_book.id, book_title: @first_book.title, book_author: @first_book.author, is_returned: false)
   end
 
   describe "GET index" do
-    it "should show current user's ordered books" do
+    it "shows current user's ordered books" do
       get :index
       expect(response).to be_success
-      expect(session[:user_id]).to eq @user.id
       expect(assigns(:orders)).not_to be_empty
       assigns(:orders).each do |o|
-        expect(o.user_id).to eq session[:user_id]
+        expect(o.user_id).to eq(session[:user_id])
       end
     end
 

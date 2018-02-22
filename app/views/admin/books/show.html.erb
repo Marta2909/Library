@@ -1,1 +1,16 @@
 <%= render partial: "layouts/show" %>
+<h4>At this moment <%= @book.title %> is borrowed by:</h4>
+<table class="table">
+  <thead>
+    <th>User</th>
+    <th>Borrow date</th>
+  </thead>
+  <tbody>
+    <% @not_returned_books.each do |order| %>
+      <tr>
+        <td><%= order.user.name %></td>
+        <td><%= order.created_at.strftime("%d %m %Y, %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

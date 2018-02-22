@@ -1,42 +1,77 @@
 require 'rails_helper'
 
-describe BooksController do
-  let!(:first_book) { Book.create(author: 'Jan Kowalski', title: "tytuł", publisher: "wydawca", description: "opis", year: 2017, count: 20, borrowed_count: 0) }
-  let!(:user) { User.create(provider: "google", uid: "1234")}
+RSpec.describe BooksController, type: :controller do
 
-  describe "GET index" do
-    it "should show all books with pages" do
+  # This should return the minimal set of attributes required to create a valid
+  # Book. As you add validations to Book, be sure to
+  # adjust the attributes here as well.
+  let(:valid_attributes) {
+    {
+      author: 'a',
+      title: 't',
+      description: 'desc',
+      year: 2018,
+      publisher: 'p',
+      count: 10
+    }
+  }
+
+  describe "GET #index" do
+    it "returns a success response" do
       get :index
       expect(response).to be_success
-      expect(assigns(:books)).not_to be_nil
+    end
+    it 'renders index template' do
+      get :index
+      expect(response).to render_template(:index)
+    end
+    it 'shows all books in the list' do
+      book1 = Book.create!(valid_attributes)
+      book2 = Book.create!(valid_attributes)
+      get :index
+      expect(assigns(:books).count).to eq 2
+    end
+    it 'redirects to search_results if there are search_keywords' do
+      get :index, params: {search_keywords: 'aaa'}
+      expect(response).to redirect_to search_results_path
     end
   end
 
-  describe "GET show" do
-    it "should be successful" do
-      get :show, params: {id: Book.first.id }
+  describe "GET #show" do
+    before(:each) do
+      @book1 = Book.create!(valid_attributes)
+      @book2 = Book.create!(author: 'author', title: 'title', description: 'description', year: 2013, publisher: 'publisher', count: 12)
+    end
+    it "returns a success response" do
+      get :show, params: {id: @book2.id}
       expect(response).to be_success
-      expect(assigns(:book)).not_to be_nil
-      expect(response).to render_template :show
+    end
+    it 'shows a proper book details' do
+      get :show, params: {id: @book2.id}
+      expect(assigns(:book).count).to eq(12)
     end
   end
 
-  describe "orderbook" do
-    it "should order a book (make a new order) and increase book's borrowed_count by 1" do
-      session[:user_id] = user.id
-
-      before = first_book.borrowed_count
-
-      expect { get :orderbook, params: {id: first_book.id } }.to change(Order, :count).by(1)
-      expect(assigns(:book)).to eq first_book
-
-      assigns(:book).update_attribute(:borrowed_count, first_book.borrowed_count+1)
-      after = assigns(:book).borrowed_count
-      
-      expect(after - before).to eq 1
-      expect(assigns(:book).save).to be true
-      expect(response).to redirect_to orders_path
+  describe "GET #search_results" do
+    before(:each) do
+      @book1 = Book.create!(valid_attributes)
+      @book2 = Book.create!(author: 'book creator', title: 'special super book', description: 'description', year: 2013, publisher: 'publisher', count: 12)
+    end
+    it 'searches a book by author' do
+      get :search_results, params: {search_keywords: 'creator'}
+      expect(assigns(:search_results).count).to eq 1
+    end
+    it 'searches a book by title' do
+      get :search_results, params: {search_keywords: 'special'}
+      expect(assigns(:search_results).count).to eq 1
+    end
+    it 'searches a book by author or title' do
+      get :search_results, params: {search_keywords: 'aaa'}
+      expect(assigns(:search_results).count).to eq 0
+    end
+    it 'renders a search_results action' do
+      get :search_results, params: {search_keywords: 'aaa'}
+      expect(response).to render_template('search_results')
     end
   end
-
 end

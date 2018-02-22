@@ -1,40 +1,48 @@
-<h1 class="page-header">Informacje o książce</h1>
+<h4>Book info</h4>
 
 <table class="table table-bordered">
   <tr>
-    <td><b>Autor: </b></td>
+    <th scope="row">Author</th>
     <td><%= @book.author %></td>
   </tr>
   <tr>
-    <td><b>Tytuł: </b></td>
+    <th scope="row">Title</th>
     <td><%= @book.title %></td>
   </tr>
   <tr>
-    <td><b>Opis: </b></td>
+    <th scope="row">Description</th>
     <td><%= @book.description%></td>
   </tr>
   <tr>
-    <td><b>Rok wydania: </b></td>
+    <th scope="row">Year of edition</th>
     <td><%= @book.year %></td>
   </tr>
   <tr>
-    <td><b>Wydawnictwo: </b></td>
+    <th scope="row">Publisher</th>
     <td><%= @book.publisher %></td>
   </tr>
   <tr>
-    <td><b>W biblioteczce jest sztuk: </b></td>
+    <th scope="row">Copies count</th>
     <td><%= @book.count %></td>
   </tr>
   <tr>
-    <td><b>Dostępnych do wypożyczenia jest sztuk: </b></td>
+    <th scope="row">Total borrowed copies count</th>
+    <td><%= @book.orders.count %></td>
+  </tr>
+  <tr>
+    <th scope="row">Copies count borrowed at this moment</th>
+    <td><%= @book.borrowed_count %></td>
+  </tr>
+  <tr>
+    <th scope="row">Copies count to borrow at this moment</th>
     <td><%= @book.count - @book.borrowed_count %></td>
   </tr>
 </table>
 
-<div class="text-right">
+<footer class="text-right">
   <%if params[:controller] == "admin/books" %>
-    <%= link_to "Powrót", admin_books_path, class:"btn btn-primary" %>
+    <%= link_to "Back", admin_books_path, class:"btn btn-dark" %>
   <% else %>
-    <%= link_to "Powrót", books_path, class: "btn btn-primary" %>
+    <%= link_to "Back", books_path, class: "btn btn-dark" %>
   <% end %>
-</div>
+</footer>

@@ -9,44 +9,55 @@
   </head>
 
   <body>
-    <div class="container">
-
-      <nav class="navbar navbar-default">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <h4 class="navbar-text"><%= link_to "Biblioteczka", root_path %></h4>
-          </div>
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <div class="nav navbar-nav navbar-right">
-              <% if params[:controller] == "admin/books" %>
-                <p class="navbar-text"><b>Panel Admina</b></p>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <%= link_to root_path, class: "navbar-brand" do %>
+          <%= fa_icon "barcode icon-7x" %> Book Library
+        <% end %>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <% if params[:controller] == "admin/books" %>
+            <li class="nav-item active nav-link">
+              Admin Panel
+            </li>
+            <li class="nav-item">
+              <%= link_to "Log out from admin panel", log_out_admin_path, id: "sign_out", class: "nav-link" %>
+            </li>
+            <% elsif current_user %>
+              <li class="nav-item active nav-link">
+                Hello <%= current_user.name %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Borrow history", orders_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Log out", signout_path, id: "sign_out", class: "nav-link" %>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link_to "Log in", "/auth/google_oauth2", id: "sign_in", class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Log in as Admin", admin_books_path, class: 'nav-link' %>
+              </li>
+            <% end %>
+          </ul>
+          <% if (params[:controller] == "books" && params[:action] == "index") || (params[:controller] == "books" && params[:action] == "search_results") %>
+            <form class="form-inline my-2 my-lg-0">
+              <%= form_tag search_results_path, method: :get do %>
+                <%= text_field_tag :search_keywords, params[:search_keywords], class: 'form-control mr-sm-2', placeholder: "Search" %>
+                <%= submit_tag "Search", class: 'btn btn-outline-success my-2 my-sm-0' %>
               <% end %>
-              <% if current_user %>
-                <p class="navbar-text">Zalogowano jako <strong><%= current_user.name %></strong></p>
-                <% if params[:controller] == "orders" %>
-                  <p class="navbar-text"><%= link_to "Powrót do dostępnych książek", root_path %></p>
-                <% else %>
-                  <p class="navbar-text"><%= link_to "Twoje wypożyczenia", orders_path %></p>
-                <% end %>
-                <p class="navbar-text"><%= link_to "Wyloguj się", signout_path, id: "sign_out" %></p>
-              <% else %>
-                <p class="navbar-text"><%= link_to "Zaloguj się przez Google", "/auth/google_oauth2", id: "sign_in" %></p>
-                <p class="navbar-text"><%= link_to "Admin", admin_books_path %></p>
-              <% end %>
-            </div>
-          </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
+            </form>
+          <% end %>
+        </div>
       </nav>
-
+    </header>
+    <section class="container">
       <% if flash[:notice] %>
-        <div class="alert alert-warning alert-dismissible" role="alert"><%= flash[:notice] %></div>
+        <div class="alert alert-warning"><%= flash[:notice] %></div>
       <% end %>
-
-
-
-
       <%= yield %>
-
-    </div>
+    </section>
   </body>
 </html>

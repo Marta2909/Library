@@ -1,0 +1,23 @@
+<h4>Users statistics</h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Borrowed books</th>
+      <th>Not returned books</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.orders.count %></td>
+        <td><%= user.orders.not_returned_user_books.count %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<footer class="text-right">
+<%= link_to "Back", admin_books_path, class:"btn btn-dark" %>
+</footer>

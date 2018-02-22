@@ -14,5 +14,5 @@ class OrdersController < ApplicationController
     @book.save
     redirect_to root_path
   end
-  
+
 end

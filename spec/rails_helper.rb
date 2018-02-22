@@ -6,6 +6,20 @@ require File.expand_path('../../config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 require 'capybara/rspec'
+
+OmniAuth.config.test_mode = true
+OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
+  :provider => 'google_oauth2',
+  :uid => '12345',
+  :info => {
+    :name => 'username',
+  },
+  :credentials => {
+    :token => "TOKEN",
+    :expires_at => 1496120719,
+  }
+})
+
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -56,23 +70,4 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  Shoulda::Matchers.configure do |config|
-    config.integrate do |with|
-      with.test_framework :rspec
-      with.library :rails
-    end
-  end
-
-  OmniAuth.config.test_mode = true
-  auth_hash = OmniAuth::AuthHash.new({
-    :provider => 'google',
-    :uid => '1234',
-    :info => {
-      :name => "Justin"
-    },
-    :credentials => {
-      :token => "password"
-    }
-  })
-  OmniAuth.config.add_mock(:google, auth_hash)
 end

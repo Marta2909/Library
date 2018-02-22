@@ -1,6 +1,6 @@
 <%= render partial: "layouts/show" %>
-<% if @book.count - @book.borrowed_count > 0 %>
-  <%= link_to "Wypożycz", orderbook_path(@book) %>
-<% else %>
-  <p>Wszystkie książki wypożyczone.</p>
+<% if (@book.count - @book.borrowed_count > 0) && current_user != nil %>
+  <%= link_to "Borrow", orderbook_path(@book) %>
+<% elsif current_user != nil %>
+  <p>All books borrowed</p>
 <% end %>

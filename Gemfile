@@ -5,7 +5,6 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
 # Use sqlite3 as the database for Active Record
@@ -29,10 +28,14 @@ gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-gem "twitter-bootstrap-rails"
+# Bootstrap
+gem 'bootstrap', '~> 4.0.0'
+gem 'jquery-rails'
+# Font awesome
+gem 'font-awesome-rails'
 gem 'simple_form'
-gem "omniauth-google-oauth2", "~> 0.2.1"
-gem "figaro"
+gem 'omniauth-google-oauth2', '~> 0.2.1'
+gem 'figaro'
 gem 'kaminari'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -41,13 +44,12 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.13'
-  gem 'rspec-rails'
-  gem 'factory_girl_rails'
-  gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
+  gem 'capybara'
+  # RSpec
   gem 'rails-controller-testing'
-  gem "factory_bot_rails", "~> 4.0"
-  gem 'selenium-webdriver'
+  gem 'rspec-rails', '~> 3.7', '>= 3.7.2'
+  # Rubocop
+  gem 'rubocop', require: false
 
 end
 

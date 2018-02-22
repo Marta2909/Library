@@ -1,12 +1,13 @@
-<p><%= link_to "Dodaj książkę", new_admin_book_path, class: "btn btn-primary" %></p>
+<h4><%= link_to "Add book", new_admin_book_path, class: "btn btn-primary" %><%= link_to "See users statistics", admin_user_statistics_path, class: "btn btn-success" %></h4>
 
 <table class="table">
   <thead>
-    <th>Autor</th>
-    <th>Tytuł</th>
-    <th>Dostępna ilość</th>
-    <th>Wypożyczonych</th>
-    <th>Do wypożyczenia</th>
+    <th>Author</th>
+    <th>Title</th>
+    <th>Copies count</th>
+    <th>Borrowed</th>
+    <th>To borrow</th>
+    <th colspan="3">Options</th>
   </thead>
   <tbody>
     <% @books.each do |book| %>
@@ -16,10 +17,10 @@
         <td><%= book.count %></td>
         <td><%= book.borrowed_count %></td>
         <td><%= book.count - book.borrowed_count %></td>
-        <td><%= link_to "Zobacz szczegóły", admin_book_path(book) %></td>
-        <td><%= link_to "Edytuj", edit_admin_book_path(book) %></td>
+        <td><%= link_to "See details", admin_book_path(book) %></td>
+        <td><%= link_to "Edit", edit_admin_book_path(book) %></td>
         <% if book.borrowed_count == 0 %>
-          <td><%= link_to "Usuń", admin_book_path(book), method: :delete, data: {confirm: "Czy na pewno chchcesz usunąć książkę #{book.title}?"} %></td>
+          <td><%= link_to "Remove", admin_book_path(book), method: :delete, data: {confirm: "Are you sure to remove #{book.title}?"} %></td>
         <% end %>
       </tr>
     <% end %>
